@@ -44,14 +44,24 @@ export class DriverManagementComponent implements OnInit {
   onSubmit() {
     if (this.driverForm.valid) {
       if (this.isEdit && this.currentDriverId) {
-        this.driverService.updateDriver(this.currentDriverId, this.driverForm.value).subscribe(() => {
-          this.loadDrivers();
-          this.resetForm();
+        this.driverService.updateDriver(this.currentDriverId, this.driverForm.value).subscribe({
+          next: () => {
+            this.loadDrivers();
+            this.resetForm();
+          },
+          error: (err) => {
+            alert('Error updating driver: ' + (err.error?.message || err.message));
+          }
         });
       } else {
-        this.driverService.createDriver(this.driverForm.value).subscribe(() => {
-          this.loadDrivers();
-          this.resetForm();
+        this.driverService.createDriver(this.driverForm.value).subscribe({
+          next: () => {
+            this.loadDrivers();
+            this.resetForm();
+          },
+          error: (err) => {
+            alert('Error adding driver: ' + (err.error?.message || err.message));
+          }
         });
       }
     }
