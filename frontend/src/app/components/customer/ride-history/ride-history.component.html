@@ -1,0 +1,90 @@
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>Xolo Rider</h3>
+        </div>
+        <nav class="nav-links">
+            <a href="javascript:void(0)" (click)="navigateTo('/customer/dashboard')">Dashboard</a>
+            <a href="javascript:void(0)" (click)="navigateTo('/customer/book-ride')">Book a Ride</a>
+            <a href="javascript:void(0)" class="active">Ride History</a>
+            <a href="javascript:void(0)" (click)="logout()" class="text-danger mt-4">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="page-title m-0">My Rides</h1>
+        </div>
+
+        <!-- Rides Table -->
+        <div class="modern-card">
+            <h3 class="mb-4">Recent Bookings</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Pickup</th>
+                            <th>Dropoff</th>
+                            <th>Fare</th>
+                            <th>Driver Info</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ride of rides">
+                            <td>{{ ride?.createdAt | date:'medium' }}</td>
+                            <td class="fw-bold">{{ ride?.pickupLocation }}</td>
+                            <td class="fw-bold">{{ ride?.dropLocation }}</td>
+                            <td class="text-success fw-bold">₹{{ ride?.fare }}</td>
+                            <td>
+                                <div *ngIf="ride?.driverId">
+                                    <strong>{{ ride?.driverId?.name }}</strong><br>
+                                    <small><i class="bi bi-telephone-fill me-1"></i>{{ ride?.driverId?.phone }}</small><br>
+                                    <small><i class="bi bi-car-front-fill me-1"></i>Car: {{ ride?.driverId?.vehicleNumber }}</small>
+                                </div>
+                                <div *ngIf="!ride?.driverId" class="text-muted">
+                                    {{ ride?.rideStatus === 'cancelled' ? 'N/A' : 'Waiting...' }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="'badge-' + ride?.rideStatus">
+                                    {{ ride?.rideStatus | titlecase }}
+                                </span>
+                            </td>
+                            <td>
+                                <div *ngIf="ride?.rideStatus === 'requested'">
+                                    <button class="btn btn-sm btn-outline-danger" *ngIf="cancellingId !== ride._id"
+                                        (click)="setCancelling(ride._id)">
+                                        Cancel Ride
+                                    </button>
+
+                                    <div *ngIf="cancellingId === ride._id"
+                                        class="d-flex align-items-center gap-1 fade-in">
+                                        <button class="btn btn-sm btn-danger" [disabled]="isCancelling"
+                                            (click)="executeCancel(ride._id)">
+                                            Confirm
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" [disabled]="isCancelling"
+                                            (click)="setCancelling(null)">
+                                            <i class="bi bi-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-muted" *ngIf="ride?.rideStatus !== 'requested'">
+                                    No actions
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="rides.length === 0">
+                            <td colspan="7" class="text-center text-muted p-4">You have no rides history yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

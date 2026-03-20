@@ -1,0 +1,107 @@
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>Xolo Admin</h3>
+        </div>
+        <nav class="nav-links">
+            <a href="javascript:void(0)" (click)="navigateTo('/admin/dashboard')">Dashboard</a>
+            <a href="javascript:void(0)" (click)="navigateTo('/admin/drivers')">Driver Management</a>
+            <a href="javascript:void(0)" class="active">Ride Management</a>
+            <a href="javascript:void(0)" (click)="logout()" class="text-danger mt-4">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="page-title m-0">Ride Management</h1>
+        </div>
+
+        <!-- Rides Table -->
+        <div class="modern-card">
+            <h3 class="mb-4">All Ride Bookings</h3>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Pickup -> Drop</th>
+                            <th>Fare</th>
+                            <th>Assigned Driver</th>
+                            <th>Assign / Re-assign</th>
+                            <th>Status</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ride of rides">
+                            <td>
+                                <div class="fw-bold">{{ ride?.customerId?.name }}</div>
+                                <small class="text-muted">{{ ride?.customerId?.phone }}</small>
+                            </td>
+                            <td>
+                                <div><span class="fw-bold text-primary">From:</span> {{ ride?.pickupLocation }}</div>
+                                <div><span class="fw-bold text-success">To:</span> {{ ride?.dropLocation }}</div>
+                                <small class="text-muted">{{ ride?.createdAt | date:'short' }}</small>
+                            </td>
+                            <td class="fw-bold">₹{{ ride?.fare }}</td>
+                            <td>
+                                <div *ngIf="ride?.driverId; else noDriver">
+                                    <div class="fw-bold">{{ ride?.driverId?.name }}</div>
+                                    <small>{{ ride?.driverId?.phone }}</small>
+                                </div>
+                                <ng-template #noDriver><span class="text-muted">Not assigned</span></ng-template>
+                            </td>
+                            <td>
+                                <select class="form-select form-select-sm custom-input" style="min-width: 150px"
+                                    *ngIf="ride?.rideStatus === 'requested' || ride?.rideStatus === 'accepted'"
+                                    [(ngModel)]="selectedDriver[ride._id]">
+                                    <option value="" disabled selected>Select Driver</option>
+                                    <option *ngFor="let d of availableDrivers" [value]="d._id">
+                                        {{ d.name }} - {{ d.vehicleType }}
+                                    </option>
+                                </select>
+                                <span *ngIf="ride?.rideStatus === 'completed' || ride?.rideStatus === 'cancelled'"
+                                    class="text-muted">
+                                    N/A
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="'badge-' + ride?.rideStatus">
+                                    {{ ride?.rideStatus | titlecase }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="dropdown"
+                                    *ngIf="ride?.rideStatus !== 'completed' && ride?.rideStatus !== 'cancelled'">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                (click)="updateRideStatus(ride._id, 'accepted', $event)">Accept /
+                                                Assign</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                (click)="updateRideStatus(ride._id, 'completed', $event)">Complete</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item text-danger" href="javascript:void(0)"
+                                                (click)="updateRideStatus(ride._id, 'cancelled', $event)">Cancel</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="rides.length === 0">
+                            <td colspan="7" class="text-center text-muted p-4">No rides found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

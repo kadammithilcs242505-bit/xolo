@@ -1,0 +1,75 @@
+﻿npx : - Building...
+At line:1 char:1
++ npx ng build > 
+build_output.log 2>&1; cat 
+build_output.log
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (- Build  
+  ing...:String) [], Remot   
+ eException
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+
+Application bundle generation failed. [4.513 seconds]
+
+X [ERROR] Could not resolve 
+"../../services/auth.service"
+
+    src/app/components/admin/
+admin-dashboard/admin-dashboa
+rd.component.ts:4:28:
+      4 Γöé import { 
+AuthService } from '../../ser
+vices/auth.service';
+        Γò╡                  
+           
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot 
+find module '../../services/a
+uth.service' or its 
+corresponding type 
+declarations. [plugin 
+angular-compiler]
+
+    src/app/components/admin/
+admin-dashboard/admin-dashboa
+rd.component.ts:4:28:
+      4 Γöé import { 
+AuthService } from '../../ser
+vices/auth.service';
+        Γò╡                  
+           
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is 
+of type 'unknown'. [plugin 
+angular-compiler]
+
+    src/app/components/admin/
+admin-dashboard/admin-dashboa
+rd.component.ts:19:16:
+      19 Γöé     this.user = 
+this.authService.getUser();
+         Γò╡                 
+~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is 
+of type 'unknown'. [plugin 
+angular-compiler]
+
+    src/app/components/admin/
+admin-dashboard/admin-dashboa
+rd.component.ts:23:4:
+      23 Γöé     
+this.authService.logout();
+         Γò╡     
+~~~~~~~~~~~~~~~~
+
+

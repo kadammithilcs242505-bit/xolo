@@ -1,0 +1,104 @@
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>Xolo Admin</h3>
+        </div>
+        <nav class="nav-links">
+            <a href="javascript:void(0)" (click)="navigateTo('/admin/dashboard')">Dashboard</a>
+            <a href="javascript:void(0)" class="active">Driver Management</a>
+            <a href="javascript:void(0)" (click)="navigateTo('/admin/rides')">Ride Management</a>
+            <a href="javascript:void(0)" (click)="logout()" class="text-danger mt-4">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="page-title m-0">Driver Management</h1>
+            <button class="btn btn-primary" (click)="showForm = !showForm">
+                {{ showForm ? 'Cancel' : '+ Add Driver' }}
+            </button>
+        </div>
+
+        <!-- Add / Edit Driver Form -->
+        <div class="modern-card" *ngIf="showForm">
+            <h3 class="mb-4">{{ isEdit ? 'Edit Driver' : 'Add New Driver' }}</h3>
+            <form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label form-title">Name</label>
+                        <input type="text" class="form-control custom-input" formControlName="name"
+                            placeholder="Driver Name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label form-title">Phone</label>
+                        <input type="text" class="form-control custom-input" formControlName="phone"
+                            placeholder="Phone Number">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label form-title">Vehicle Number</label>
+                        <input type="text" class="form-control custom-input" formControlName="vehicleNumber"
+                            placeholder="e.g. AB 12 CD 3456">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label form-title">Vehicle Type</label>
+                        <input type="text" class="form-control custom-input" formControlName="vehicleType"
+                            placeholder="e.g. Sedan, SUV">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label form-title">Status</label>
+                        <select class="form-select custom-input" formControlName="status">
+                            <option value="available">Available</option>
+                            <option value="busy">Busy</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary submit-btn px-4 mt-3" [disabled]="driverForm.invalid">
+                    {{ isEdit ? 'Update Driver' : 'Save Driver' }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Drivers Table -->
+        <div class="modern-card">
+            <h3 class="mb-4">All Drivers</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Vehicle Number</th>
+                            <th>Vehicle Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let driver of drivers">
+                            <td class="fw-bold">{{ driver?.name }}</td>
+                            <td>{{ driver?.phone }}</td>
+                            <td>{{ driver?.vehicleNumber }}</td>
+                            <td>{{ driver?.vehicleType }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="'badge-' + driver?.status">
+                                    {{ driver?.status | titlecase }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-2"
+                                    (click)="editDriver(driver)">Edit</button>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    (click)="deleteDriver(driver._id)">Delete</button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="drivers.length === 0">
+                            <td colspan="6" class="text-center text-muted p-4">No drivers found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>

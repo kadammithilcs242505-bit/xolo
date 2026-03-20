@@ -1,0 +1,1 @@
+mongodb://XOLO:123654@ac-ycnhgrx-shard-00-02.am12rs1.mongodb.net:27017,ac-ycnhgrx-shard-00-00.am12rs1.mongodb.net:27017,ac-ycnhgrx-shard-00-01.am12rs1.mongodb.net:27017/cab_booking?ssl=true&authSource=admin&replicaSet=atlas-a0lazt-shard-0
