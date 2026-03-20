@@ -21,21 +21,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/drivers', driverRoutes);
 app.use('/api/rides', rideRoutes);
 
-const path = require('path');
-
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/dist/frontend/browser')));
-    
-    app.get('*', (req, res) =>
-        res.sendFile(
-            path.resolve(__dirname, '../frontend', 'dist', 'frontend', 'browser', 'index.html')
-        )
-    );
-} else {
-    app.get('/', (req, res) => {
-        res.send('API is running...');
-    });
-}
+// Root route
+app.get('/', (req, res) => {
+    res.send('API is running...');
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {
